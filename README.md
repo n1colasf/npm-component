@@ -3,6 +3,9 @@
 
 This is a React component packaged as an npm module. The main component exported from this package is `Component`.
 
+[![Components](https://bg-so-1.zippyimage.com/2023/12/13/474df00d74605c0a9d0e3f4d457b36c5.png)]
+
+
 ## Installation
 
 To install this package, run the following command in your terminal:
@@ -51,10 +54,12 @@ The Component accepts the following props:
 Here's an example of how to use the Component, getting all the countries names from the REST Countries:
 
 ```javascript
+import { useEffect, useState } from "react";
+import "./App.css";
+
 import { Component } from "@n1colasf/npm-component";
 
 function App() {
-
   const onCompClick = () => {
     console.log("Click");
   };
