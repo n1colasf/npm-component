@@ -1,70 +1,127 @@
-# Getting Started with Create React App
+# Test for creating an npm package
+## @n1colasf/npm-component
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React component packaged as an npm module. The main component exported from this package is `Component`.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+To install this package, run the following command in your terminal:
 
-### `npm start`
+```sh
+npm install @n1colasf/npm-component
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Usage
+First, import the Component into your React file:
 
-### `npm test`
+```js
+import { Component } from '@n1colasf/npm-component';
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Then, you can use the Component in your React component:
 
-### `npm run build`
+```js
+<Component
+  title="Your Title"
+  label="Your Label"
+  tableHeader={yourTableHeader}
+  tableContent={yourTableContent}
+  onCompClick={yourClickHandler}
+  countrySelector={yourCountrySelector}
+/>
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Props
+The Component accepts the following props:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- <b>title</b> (string): The title to be displayed on the component.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- <b>label</b> (string): The label for the button in the component.
 
-### `npm run eject`
+- <b>tableHeader</b> (object): An object representing the headers of the table. The keys of the object are the identifiers of the headers, and the values are the display names of the headers.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- <b>tableContent</b> (array): An array of objects representing the content of the table. Each object corresponds to a row in the table, and the keys should match those in tableHeader.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- <b>onCompClick</b> (function): A function to be called when the button in the component is clicked.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- <b>countrySelector</b> (object): An object representing the options for the country selector. The keys of the object are the country codes, and the values are the country names.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Example
+Here's an example of how to use the Component, getting all the countries names from the REST Countries:
 
-## Learn More
+```javascript
+import { Component } from "@n1colasf/npm-component";
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+function App() {
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  const onCompClick = () => {
+    console.log("Click");
+  };
 
-### Code Splitting
+  const tableHeader = {
+    name: "Nombre",
+    date: "Fecha",
+    action: "Acción",
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  const tableContent = [
+    {
+      name: "Nicolás",
+      date: "2021-09-01",
+      action: "Editar",
+    },
+    {
+      name: "Martina",
+      date: "2021-12-16",
+      action: "Eliminar",
+    },
+    {
+      name: "Juan",
+      date: "2021-10-22",
+      action: "Editar",
+    },
+  ];
 
-### Analyzing the Bundle Size
+  const [countrySelector, setCountrySelector] = useState({});
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all");
+        const data = await response.json();
+        console.log(data);
+        const countries = data.reduce((acc, country) => {
+          acc[country.cca2] = country.name.common;
+          return acc;
+        }, {});
+        console.log(countries);
+        setCountrySelector(countries);
+      } catch (error) {
+        console.error("Error fetching countries", error);
+      }
+    };
+    fetchCountries();
+  }, []);
 
-### Making a Progressive Web App
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+      </header>
+      <Component
+        title="Titulo Prop"
+        label="Label Botón Prop"
+        tableHeader={tableHeader}
+        tableContent={tableContent}
+        onCompClick={onCompClick}
+        countrySelector={countrySelector}
+      />
+    </div>
+  );
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export default App;
+```
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Enjoy!
